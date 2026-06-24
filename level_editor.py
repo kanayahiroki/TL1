@@ -170,7 +170,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         """シーン解析要再帰関数"""
 
         # オブジェクト名書き込み
-        self.write_and_print(file, object.type + " - " + object.name)
+        self.write_and_print(file, indent + object.type + " - " + object.name)
         trans, rot, scale = object.matrix_local.decompose()
         #回転を Quternion から Euler (3軸での回転角) に変換
         rot = rot.to_euler()
@@ -179,11 +179,16 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         rot.y = math.degrees(rot.y)
         rot.z = math.degrees(rot.z)
         #トランスフォーム情報を表示
-        self.write_and_print(file, "Trans(%f,%f,%f)" % (trans.x, trans.y, trans.z))
-        self.write_and_print(file, "Rot(%f,%f,%f)" % (rot.x, rot.y, rot.z) )
-        self.write_and_print(file, "Scale(%f,%f,%f)" % (scale.x, scale.y, scale.z) )
+        self.write_and_print(file, indent + "Trans(%f,%f,%f)" % (trans.x, trans.y, trans.z))
+        self.write_and_print(file, indent + "Rot(%f,%f,%f)" % (rot.x, rot.y, rot.z) )
+        self.write_and_print(file, indent + "Scale(%f,%f,%f)" % (scale.x, scale.y, scale.z) )
         self.write_and_print(file, '')
-
+        
+        
+        #子ノードへ進む（深さが1上がる）
+        for child in object.children:
+            self.parse_scene_recursive(file, child, level + 1)
+        
 
 # Blenderブレンダーに登録するクラスリスト
 classes = (
