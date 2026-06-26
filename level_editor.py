@@ -211,10 +211,13 @@ class OBJECT_PT_file_name(bpy.types.Panel):
     # サブメニューの描画
     def draw(self, context):
 
-        # パネルに項目を追加
-        self.layout.operator(MYADDON_OT_stretch_vertex.bl_idname, text=MYADDON_OT_stretch_vertex.bl_label)
-        self.layout.operator(MYADDON_OT_create_ico_sphere.bl_idname, text=MYADDON_OT_create_ico_sphere.bl_label)
-        self.layout.operator(MYADDON_OT_export_scene.bl_idname, text=MYADDON_OT_export_scene.bl_label)
+        #パネルに項目を追加
+        if "file_name" in context.object:
+            #既にプロパティがあれば、プロパティを表示
+            self.layout.prop(context.object, '{"file_name"}',text=self.bl_label)
+        else:
+            #プロパティがなければ、プロパティ追加ボタンを表示
+            self.layout.operator(MYADDON_OT_add_filename.bl_idname)
 
 #オペレータ カスタムプロパティ['file_name']追加
 class MYADDON_OT_add_filename(bpy.types.Operator):
