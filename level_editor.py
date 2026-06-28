@@ -168,13 +168,12 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         
     def parse_scene_recursive(self, file, object, level):
         """シーン解析要再帰関数"""
-
+        
         #深さ分インデントする(タブを挿入)
         indent = ''
         for i in range(level):
             indent += "\t"
-
-
+        
         # オブジェクト名書き込み
         self.write_and_print(file, indent + object.type)
         trans, rot, scale = object.matrix_local.decompose()
@@ -228,13 +227,10 @@ class MYADDON_OT_add_filename(bpy.types.Operator):
 
     def execute(self, context):
 
-        #パネルに項目を追加
-        if "file_name" in context.object:
-            #既にプロパティがあれば、プロパティを表示
-            self.layout.prop(context.object, '["file_name"]', text=self.bl_label)
-        else:
-            #プロパティがなければ、プロパティ追加ボタンを表示
-            self.layout.operator(MYADDON_OT_add_filename.bl_idname)
+        #{'file_name'}カスタムプロパティを追加
+        context.object["file_name"] = ""
+
+        return {"FINISHED"}
 
 # Blenderブレンダーに登録するクラスリスト
 classes = (
