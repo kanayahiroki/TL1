@@ -29,25 +29,7 @@ def draw_menu_manual(self, context):
     #トップバーの「エディターメニュー」に項目（オペレータ）を追加
     self.layout.operator("wm.url_open_preset", text="Manual", icon="HELP")
 
-#Add-On有効時コールバック
-def register():
-    # Blenderにクラスを登録
-    for cls in classes:
-        bpy.utils.register_class(cls)
-    
-    #メニューに項目を追加
-    bpy.types.TOPBAR_MT_editor_menus.append(TOPBAR_MT_my_menu.submenu)
-    print("レべルエディタが有効化されました。")
-    
-#Add-On無効化時コールバック
-def unregister():
-    #メニューから項目を削除
-    bpy.types.TOPBAR_MT_editor_menus.remove(TOPBAR_MT_my_menu.submenu)
-    # Blenderからクラスを削除
-    for cls in classes:
-        bpy.utils.unregister_class(cls)
-    print("レべルエディタが無効化されました。")
-    
+
 #トップバーの拡張メニュー
 class TOPBAR_MT_my_menu(bpy.types.Menu):
     #Blenderがクラスを識別する為の固有の文字列
@@ -287,6 +269,7 @@ class DrawCollider:
             if not "collider" in object:
                 continue
 
+
             #中心点、サイズの変数を宣言
             center = mathutils.Vector((0,0,0))
             size = mathutils.Vector((2,2,2))
@@ -316,21 +299,22 @@ class DrawCollider:
                 pos = object.matrix_world @ pos
                 #頂点データリストに座標を追加
                 vertices['pos'].append(pos)
-                #前面を構成する辺の頂点インデックス
-                indices.append([start+0,start+1])
-                indices.append([start+2,start+3])
-                indices.append([start+0,start+2])
-                indices.append([start+1,start+3])
-                #奧面を構成する辺の頂点インデックス
-                indices.append([start+4,start+5])
-                indices.append([start+6,start+7])
-                indices.append([start+4,start+6])
-                indices.append([start+5,start+7])
-                #手前と奥を繋ぐ辺の頂点インデックス
-                indices.append([start+0,start+4])
-                indices.append([start+1,start+5])
-                indices.append([start+2,start+6])
-                indices.append([start+3,start+7])
+
+            #前面を構成する辺の頂点インデックス
+            indices.append([start+0,start+1])
+            indices.append([start+2,start+3])
+            indices.append([start+0,start+2])
+            indices.append([start+1,start+3])
+            #奧面を構成する辺の頂点インデックス
+            indices.append([start+4,start+5])
+            indices.append([start+6,start+7])
+            indices.append([start+4,start+6])
+            indices.append([start+5,start+7])
+            #手前と奥を繋ぐ辺の頂点インデックス
+            indices.append([start+0,start+4])
+            indices.append([start+1,start+5])
+            indices.append([start+2,start+6])
+            indices.append([start+3,start+7])
 
 
 
@@ -361,7 +345,7 @@ def register():
 #Add-On無効化時コールバック
 def unregister():
     #   メニューから項目を削除
-    bpy.types.TOPBAR_MT_editor_name_menus.remove(TOPBAR_MT_my_menu.submenu)
+    bpy.types.TOPBAR_MT_editor_menus.remove(TOPBAR_MT_my_menu.submenu)
     #3Dビューから描画関数を削除
     bpy.types.SpaceView3D.draw_handler_remove(DrawCollider.handle,"WINDOW")
 
@@ -388,7 +372,7 @@ class MYADDON_OT_add_collider(bpy.types.Operator):
 
 #パネル　コライダー
 class OBJECT_PT_collider(bpy.types.Panel):
-    bl_idname = "OBLECT_PT_collider"
+    bl_idname = "OBJECT_PT_collider"
     bl_label = "Collider"
     bl_space_type = "PROPERTIES"
     bl_region_type = "WINDOW"
