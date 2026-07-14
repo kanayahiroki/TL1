@@ -267,7 +267,7 @@ class MYADDON_OT_export_scene(bpy.types.Operator, bpy_extras.io_utils.ExportHelp
         if 'collider' in object:
             collider = dict()
             collider["type"] = object["collider"]
-            collider["center"] = object["collider_center"].to_lost()
+            collider["center"] = object["collider_center"].to_list()
             collider["size"] = object["collider_size"].to_list()
             json_object["collider"] = collider
 
